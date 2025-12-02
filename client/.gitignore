@@ -1,18 +1,19 @@
-# Dependencies (Sampah library yang berat)
+# --- Block semua folder node_modules di mana saja ---
 node_modules/
+**/node_modules/
 
-# Environment variables (RAHASIA! Jangan diupload)
+# --- Block file environment ---
 .env
+**/.env
 
-# Build output
+# --- Block folder build ---
 build/
+**/build/
 dist/
+**/dist/
 
-# Logs
+# --- Lainnya ---
+.DS_Store
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
-
-# Uploads (Foto bukti absensi jangan menuhin GitHub)
-uploads/
-!uploads/.gitkeep

@@ -1,0 +1,32 @@
+/* src/components/Layout.module.css */
+
+.layoutContainer {
+    display: flex;
+    min-height: 100vh;
+    background-color: #f0f2f5; /* Latar belakang abu-abu */
+    overflow-x: hidden; /* Mencegah scroll horizontal */
+}
+
+.mainWrapper {
+    flex-grow: 1; /* Mengisi sisa ruang di sebelah sidebar */
+    display: flex;
+    flex-direction: column;
+    transition: margin-left 0.3s ease; /* Jika Anda menggunakan margin */
+    width: 100%; /* Pastikan lebar mengisi */
+}
+
+.mainContent {
+    flex-grow: 1;
+    padding: 2rem;
+    /* Memberikan batasan lebar agar konten tidak terlalu lebar di layar besar */
+    max-width: 1600px; 
+    width: 100%;
+    box-sizing: border-box;
+}
+
+/* Responsif untuk Mobile */
+@media (max-width: 768px) {
+    .mainContent {
+        padding: 1rem;
+    }
+}

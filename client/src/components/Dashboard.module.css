@@ -1,0 +1,224 @@
+/* -------------------------------------------------
+   NEW STYLES – Header becomes a fixed top bar
+   ------------------------------------------------- */
+
+
+/* Dashboard.module.css */
+
+.dashboard-container {
+  display: flex;
+  justify-content: center; /* <<< PASTIKAN INI ADA (Center horizontal) */
+  align-items: flex-start; /* Menggunakan flex-start agar konten mulai dari atas */
+  max-width: 900px;
+  margin: 0 auto 2rem;
+  padding: 2rem;
+  background-color: #ffffff;
+  border-radius: 16px;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* the old header now lives inside the sticky wrapper */
+.dashboard-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+}
+
+/* Title inside the sticky bar */
+.dashboard-header h2 {
+  font-size: 1.8rem;
+  color: #2c3e50;
+  font-weight: 600;
+  margin: 0;
+}
+
+/* Button group – centered under the title */
+.dashboard-header .button-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  justify-content: center;
+}
+
+.welcome-section {
+  background: linear-gradient(135deg, #6e8efb, #a777e6);
+  color: white;
+  padding: 1.8rem;
+  border-radius: 12px;
+  margin-bottom: 2rem;
+  box-shadow: 0 4px 15px rgba(110, 142, 251, 0.3);
+  animation: fadeIn 0.6s ease-out;
+}
+
+.welcome-section h2 {
+  margin: 0 0 0.8rem;
+  font-size: 1.6rem;
+  font-weight: 600;
+}
+
+.welcome-section p {
+  margin: 0.4rem 0;
+  font-size: 1rem;
+  opacity: 0.95;
+}
+
+.welcome-section strong {
+  font-weight: 600;
+}
+
+.button-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  justify-content: center;
+  margin-bottom: 2rem;
+}
+
+.btn-ds-secondary {
+  background-color: #ffffff;
+  color: #5a67d8;
+  border: 2px solid #5a67d8;
+  padding: 0.75rem 1.5rem;
+  font-size: 1rem;
+  font-weight: 600;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  min-width: 160px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+}
+
+.btn-ds-secondary:hover {
+  background-color: #5a67d8;
+  color: white;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(90, 103, 216, 0.3);
+}
+
+.btn-logout {
+  background-color: #e53e3e;
+  color: white;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  font-size: 1rem;
+  font-weight: 600;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  min-width: 160px;
+}
+
+.btn-logout:hover {
+  background-color: #c53030;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(229, 62, 62, 0.4);
+}
+
+.btn-auto {
+  flex: 1;
+  max-width: 200px;
+}
+
+.divider {
+  border: none;
+  border-top: 2px solid #e2e8f0;
+  margin: 2rem 0;
+}
+
+.attendance-section {
+  background-color: white;
+  padding: 1.8rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+/* Dashboard.module.css */
+.attendance-header {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 1.5rem;
+  font-size: 1.4rem;
+  font-weight: 600;
+  color: #2d3748;
+}
+
+.attendance-header::before {
+  content: '';
+  width: 12px;
+  height: 12px;
+  background-color: #48bb78;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.section-title {
+  font-size: 1.4rem;
+  color: #005eff;
+  margin-bottom: 1.2rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+}
+
+.section-title::before {
+  content: '';
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  background-color: #48bb78;
+  border-radius: 50%;
+  margin-right: 0.6rem;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .dashboard-container {
+    margin: 1rem;
+    padding: 1.5rem;
+  }
+
+  .button-group {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .btn-auto {
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .welcome-section h2 {
+    font-size: 1.4rem;
+  }
+
+  .dashboard-header h2 {
+    font-size: 1.7rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .welcome-section {
+    padding: 1.4rem;
+  }
+
+  .attendance-section {
+    padding: 1.2rem;
+  }
+}
+
+/* Fade-in animation */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

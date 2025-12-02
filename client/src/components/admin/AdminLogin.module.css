@@ -1,0 +1,201 @@
+/* src/components/Login.css (Versi Baru) */
+
+/* Global styles for the body/html - make sure this isn't overriding main index.css */
+/* html, body, #root {
+    height: 100%;
+    margin: 0;
+    font-family: 'Poppins', sans-serif; 
+    background-color: #f0f2f5; 
+} */
+
+
+/* 1. Kontainer Utama (Full Screen Background) */
+.login-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    position: relative;
+    overflow: hidden; /* Sembunyikan jika ada elemen di luar */
+    font-family: sans-serif; /* Ganti dengan Poppins jika ada */
+}
+
+/* Pola titik-titik di latar belakang */
+.login-container::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: radial-gradient(#002aff 1px, transparent 1px);
+    background-size: 20px 20px;
+    opacity: 0.8; /* Sesuaikan intensitas titik */
+}
+
+/* Bentuk abstrak (contoh, Anda bisa membuat lebih kompleks) */
+.login-container::after {
+    content: '';
+    position: absolute;
+    bottom: -100px;
+    right: -100px;
+    width: 300px;
+    height: 300px;
+    background-color: rgba(255, 255, 255, 0.5); /* Warna putih semi-transparan */
+    border-radius: 50%;
+    filter: blur(50px); /* Efek blur */
+    transform: rotate(45deg);
+    z-index: 1; /* Pastikan di bawah card */
+}
+
+
+/* 2. Card Login */
+.login-card {
+    background-color: #ffffff;
+    padding: 40px;
+    border-radius: 12px; /* Lebih rounded */
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08); /* Shadow lebih tebal */
+    width: 100%;
+    max-width: 400px; /* Lebar maksimum card */
+    text-align: center;
+    z-index: 10; /* Pastikan di atas latar belakang */
+    position: relative; /* Untuk positioning elemen di dalamnya */
+}
+
+.login-header {
+    margin-bottom: 30px;
+}
+
+.polinela-logo {
+    width: 80px; /* Ukuran logo */
+    height: 80px;
+    object-fit: contain;
+    margin-bottom: 15px;
+}
+
+.app-title {
+    font-size: 1.6rem;
+    color: #333;
+    margin-bottom: 8px;
+    font-weight: 600;
+}
+
+.app-subtitle {
+    font-size: 0.9rem;
+    color: #666;
+    margin-bottom: 0;
+}
+
+.error-message {
+    color: #e74c3c;
+    background-color: #fdeded;
+    border: 1px solid #e74c3c;
+    padding: 10px;
+    border-radius: 5px;
+    margin-bottom: 20px;
+    font-size: 0.9em;
+}
+
+/* 3. Form Input */
+.login-form {
+    text-align: left;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: block;
+    font-size: 0.75rem; /* Lebih kecil, uppercase */
+    color: #555;
+    margin-bottom: 8px;
+    font-weight: 500;
+    text-transform: uppercase;
+}
+
+.form-group input {
+    width: 100%;
+    padding: 12px 15px;
+    border: 1px solid #ddd;
+    border-radius: 8px; /* Lebih rounded */
+    font-size: 1rem;
+    color: #333;
+    outline: none;
+    transition: border-color 0.2s;
+}
+
+.form-group input::placeholder {
+    color: #aaa;
+}
+
+.form-group input:focus {
+    border-color: #2196F3; /* Biru terang saat focus */
+}
+
+/* Password Input Wrapper untuk ikon mata dan lupa password */
+.password-input-wrapper {
+    position: relative;
+    display: flex; /* Untuk menempatkan input dan ikon di satu baris */
+    align-items: center;
+}
+
+.password-input-wrapper input {
+    flex-grow: 1; /* Input mengambil sisa ruang */
+    padding-right: 40px; /* Beri ruang untuk ikon mata */
+}
+
+.toggle-password {
+    position: absolute;
+    right: 15px; /* Posisi ikon mata */
+    cursor: pointer;
+    color: #888;
+    z-index: 1; /* Pastikan di atas input */
+    top: 50%; /* Tengahkan vertikal */
+    transform: translateY(-50%);
+}
+
+.forgot-password-link {
+    position: absolute;
+    right: 0; /* Pindahkan ke kanan */
+    top: 55px; /* Sesuaikan posisi vertikal agar di atas input */
+    font-size: 0.8em;
+    color: #2196F3; /* Biru */
+    text-decoration: none;
+    transition: color 0.2s;
+    font-weight: 500;
+}
+
+.forgot-password-link:hover {
+    color: #1976D2; /* Biru lebih gelap */
+}
+
+/* 4. Tombol Login */
+.login-button {
+    width: 100%;
+    padding: 14px;
+    background-color: #2196F3; /* Warna biru utama */
+    color: white;
+    border: none;
+    border-radius: 8px; /* Rounded */
+    font-size: 1.1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    margin-top: 20px; /* Jarak dari input terakhir */
+}
+
+.login-button:hover {
+    background-color: #1976D2; /* Warna biru lebih gelap saat hover */
+}
+
+/* Responsif sederhana */
+@media (max-width: 600px) {
+    .login-card {
+        margin: 20px;
+        padding: 30px;
+    }
+    .app-title {
+        font-size: 1.4rem;
+    }
+}

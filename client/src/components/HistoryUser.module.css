@@ -1,0 +1,259 @@
+/* src/components/HistoryUser.module.css */
+
+.page-container {
+  max-width: 1100px; /* Diperlebar sedikit agar muat 2 kolom */
+  margin: 2rem auto;
+  padding: 2rem;
+  background-color: #ffffff;
+  border-radius: 16px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+  animation: fadeIn 0.5s ease-out;
+}
+
+.history-header {
+  margin-bottom: 2rem;
+  border-bottom: 1px solid #f0f0f0;
+  padding-bottom: 1rem;
+}
+
+.history-header h2 {
+  margin: 0.5rem 0 0 0;
+  font-size: 1.8rem;
+  color: #2c3e50;
+}
+
+.back-button {
+  text-decoration: none;
+  color: #2196F3;
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+/* --- LAYOUT 2 KOLOM --- */
+.content-wrapper {
+  display: flex;
+  gap: 2rem;
+  align-items: flex-start; /* Agar kalender tidak ketarik ke bawah */
+}
+
+/* --- BAGIAN KALENDER (KIRI) --- */
+.calendar-section {
+  flex: 1;
+  max-width: 350px; /* Batasi lebar kalender */
+}
+
+.calendar-card {
+  background: #f8f9fa;
+  padding: 1.5rem;
+  border-radius: 12px;
+  border: 1px solid #e9ecef;
+}
+
+.calendar-card h3 {
+    margin-top: 0;
+    margin-bottom: 1rem;
+    font-size: 1.1rem;
+    color: #444;
+}
+
+/* Override Default React-Calendar Styles */
+.react-calendar {
+    width: 100% !important;
+    border: none !important;
+    background: transparent !important;
+    font-family: inherit !important;
+}
+
+/* Tombol navigasi bulan (<< < > >>) */
+:global(.react-calendar__navigation button) {
+    color: #2196F3;
+    min-width: 30px;
+    background: none;
+    font-size: 1.2rem;
+    border-radius: 8px;
+}
+:global(.react-calendar__navigation button:enabled:hover),
+:global(.react-calendar__navigation button:enabled:focus) {
+    background-color: #e3f2fd;
+}
+
+/* Hari dalam bulan (Tiles) */
+:global(.react-calendar__tile) {
+    padding: 10px 6px;
+    border-radius: 8px;
+    font-weight: 500;
+    font-size: 0.9rem;
+}
+
+/* Hari yang dipilih */
+:global(.react-calendar__tile--active),
+:global(.react-calendar__tile--active:enabled:hover),
+:global(.react-calendar__tile--active:enabled:focus) {
+    background: #2196F3 !important;
+    color: white !important;
+}
+
+/* Hari saat ini (Today) */
+:global(.react-calendar__tile--now) {
+    background: #e3f2fd;
+    color: #2196F3;
+}
+
+.selected-date-info {
+    margin-top: 1rem;
+    font-size: 0.9rem;
+    color: #666;
+    text-align: center;
+    border-top: 1px solid #ddd;
+    padding-top: 10px;
+}
+
+/* --- BAGIAN LIST (KANAN) --- */
+.list-section {
+  flex: 2; /* Mengambil sisa ruang */
+  min-height: 300px; /* Tinggi minimal agar rapi */
+}
+
+.history-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.history-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem;
+  background: white;
+  border: 1px solid #eee;
+  border-radius: 10px;
+  margin-bottom: 0.8rem;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.history-item:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+  border-color: #2196F3;
+}
+
+.item-left {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.icon-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.history-details {
+    display: flex;
+    flex-direction: column;
+}
+
+.history-time {
+    font-weight: 700;
+    font-size: 1.1rem;
+    color: #333;
+}
+
+.history-date-text {
+    font-size: 0.85rem;
+    color: #888;
+}
+
+.history-status {
+  font-weight: 600;
+  padding: 0.4rem 1rem;
+  border-radius: 20px;
+  font-size: 0.85rem;
+}
+
+.status-success {
+    background-color: #e8f5e9;
+    color: #2e7d32;
+}
+
+.status-fail {
+    background-color: #ffebee;
+    color: #c62828;
+}
+
+/* Empty State */
+.empty-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    min-height: 250px;
+    color: #999;
+    text-align: center;
+    border: 2px dashed #eee;
+    border-radius: 12px;
+}
+
+/* --- BAGIAN PAGINATION BARU --- */
+.pagination-controls {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.5rem;
+    margin-top: 2rem;
+}
+
+.pagination-btn {
+    padding: 8px 14px;
+    border: 1px solid #ddd;
+    background-color: #fff;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 500;
+    color: #555;
+    transition: all 0.2s;
+    min-width: 40px;
+    text-align: center;
+}
+
+.pagination-btn:hover:not(:disabled) {
+    border-color: #2196F3;
+    color: #2196F3;
+}
+
+.pagination-btn.active-page {
+    background-color: #2196F3;
+    color: white;
+    border-color: #2196F3;
+    font-weight: 700;
+}
+
+.pagination-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+
+/* --- RESPONSIVE (HP) --- */
+@media (max-width: 850px) {
+  .content-wrapper {
+    flex-direction: column;
+  }
+  
+  .calendar-section {
+    max-width: 100%;
+    width: 100%;
+  }
+
+  .list-section {
+      width: 100%;
+  }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}

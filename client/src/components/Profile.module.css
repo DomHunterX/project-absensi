@@ -1,0 +1,150 @@
+/* src/components/Profile.module.css */
+
+/* --- VARIABEL TEMA --- */
+:root {
+    --primary-blue: #2196F3;
+    --primary-dark: #1976D2;
+    --text-dark: #1e293b;
+    --text-grey: #64748b;
+    --bg-light: #f8fafc;
+    --card-bg: #ffffff;
+    --danger: #ef4444;
+    --success: #10b981;
+}
+
+.pageContainer {
+    padding-bottom: 3rem;
+    animation: fadeIn 0.5s ease-out;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+/* --- HEADER --- */
+.headerSection {
+    background: linear-gradient(135deg, var(--primary-blue), var(--primary-dark));
+    padding: 2.5rem;
+    border-radius: 20px;
+    color: white;
+    margin-bottom: 2rem;
+    box-shadow: 0 10px 25px -5px rgba(33, 150, 243, 0.3);
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+}
+
+.titleGroup h1 { font-size: 2rem; font-weight: 800; margin: 0; letter-spacing: -0.5px; }
+.titleGroup p { margin: 8px 0 0 0; opacity: 0.9; font-size: 1rem; font-weight: 400; }
+
+/* --- LAYOUT BARU: TOP SECTION (Foto + Data) --- */
+.topSection {
+    display: grid;
+    grid-template-columns: 350px 1fr; /* Kiri 350px, Kanan sisa ruang */
+    gap: 2rem;
+    margin-bottom: 2rem;
+    align-items: stretch; /* KUNCI: Agar tinggi kedua card sama persis */
+}
+
+/* --- CARDS --- */
+.card {
+    background: var(--card-bg);
+    border-radius: 20px;
+    padding: 2rem;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+    border: 1px solid #e2e8f0;
+    height: 100%; /* Card mengisi penuh tinggi container induknya */
+    display: flex;
+    flex-direction: column;
+}
+
+/* --- PROFILE PHOTO SECTION --- */
+.profileCard {
+    text-align: center;
+    justify-content: center; /* Konten vertikal di tengah */
+}
+
+.imageWrapper {
+    position: relative;
+    width: 160px;
+    height: 160px;
+    margin: 0 auto 1.5rem;
+}
+
+.profileImage {
+    width: 100%; height: 100%; border-radius: 50%; object-fit: cover;
+    border: 5px solid white; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1); background: #f1f5f9;
+}
+
+.placeholderImage {
+    width: 100%; height: 100%; border-radius: 50%; background: #f1f5f9;
+    display: flex; align-items: center; justify-content: center;
+    color: #94a3b8; border: 5px solid white; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1);
+}
+
+.uploadLabel {
+    display: inline-block;
+    background: #e0f2fe; color: #0284c7; padding: 10px 20px; border-radius: 30px;
+    font-weight: 600; font-size: 0.9rem; cursor: pointer; transition: all 0.2s; margin-top: 10px;
+}
+.uploadLabel:hover { background: #bae6fd; transform: translateY(-2px); }
+.hiddenInput { display: none; }
+
+.warningText {
+    font-size: 0.8rem;
+    color: var(--danger);
+    margin-top: 1.5rem;
+    line-height: 1.5;
+    font-weight: 600;
+    background-color: #fee2e2;
+    padding: 10px;
+    border-radius: 8px;
+    border: 1px solid #fecaca;
+}
+
+/* --- FORM SECTIONS --- */
+.sectionTitle {
+    font-size: 1.25rem; font-weight: 700; color: var(--text-dark); margin-bottom: 1.5rem;
+    padding-bottom: 1rem; border-bottom: 1px solid #f1f5f9; display: flex; align-items: center; gap: 10px; width: 100%;
+}
+
+.formGrid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+    margin-bottom: auto; /* Dorong tombol ke bawah */
+    width: 100%;
+}
+
+.formGroup { display: flex; flex-direction: column; gap: 8px; }
+.formGroup.fullWidth { grid-column: span 2; }
+
+.label {
+    font-size: 0.85rem; font-weight: 700; color: var(--text-grey);
+    text-transform: uppercase; letter-spacing: 0.05em;
+}
+
+.input {
+    padding: 12px 16px; border-radius: 10px; border: 1px solid #cbd5e1;
+    font-size: 1rem; color: var(--text-dark); background: #ffffff; transition: all 0.2s;
+}
+.input:focus { outline: none; border-color: var(--primary-blue); box-shadow: 0 0 0 3px rgba(33, 150, 243, 0.1); }
+.input:read-only { background-color: #f1f5f9; border-color: #e2e8f0; color: #64748b; cursor: not-allowed; font-weight: 500; }
+
+.submitBtn {
+    background: var(--primary-blue); color: white; border: none; padding: 12px 24px;
+    border-radius: 10px; font-weight: 600; cursor: pointer; transition: all 0.2s; width: 100%; margin-top: 2rem;
+}
+.submitBtn:hover { background: var(--primary-dark); transform: translateY(-2px); box-shadow: 0 4px 12px rgba(33, 150, 243, 0.3); }
+.submitBtn:disabled { background: #94a3b8; cursor: not-allowed; transform: none; }
+
+.message { padding: 12px; border-radius: 8px; margin-bottom: 1.5rem; font-size: 0.9rem; font-weight: 500; width: 100%; }
+.success { background: #dcfce7; color: #15803d; border: 1px solid #bbf7d0; }
+.error { background: #fee2e2; color: #991b1b; border: 1px solid #fecaca; }
+
+/* RESPONSIVE */
+@media (max-width: 900px) {
+    .topSection { grid-template-columns: 1fr; } /* Stack vertikal di HP */
+    .headerSection { padding: 2rem; }
+    .formGrid { grid-template-columns: 1fr; }
+    .formGroup.fullWidth { grid-column: span 1; }
+}
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }

@@ -1,0 +1,279 @@
+/* src/components/Attendance.module.css */
+
+:root {
+    --primary: #2563eb;
+    --primary-dark: #1e40af;
+    --success: #10b981;
+    --warning: #f59e0b;
+    --danger: #ef4444;
+    --dark: #1e293b;
+    --light: #f8fafc;
+    --glass-bg: rgba(255, 255, 255, 0.95);
+    --shadow-lg: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+}
+
+.pageContainer {
+    min-height: 80vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 1rem;
+    background: radial-gradient(circle at top, #eff6ff, #f8fafc);
+}
+
+/* --- MAIN CARD --- */
+.attendanceCard {
+    background: var(--glass-bg);
+    backdrop-filter: blur(10px);
+    width: 100%;
+    max-width: 480px; /* Ukuran ideal HP */
+    border-radius: 24px;
+    box-shadow: var(--shadow-lg);
+    padding: 2rem;
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.3s ease;
+}
+
+.cardHeader {
+    margin-bottom: 1.5rem;
+}
+
+.title {
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: var(--dark);
+    margin: 0 0 0.5rem 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+.subtitle {
+    font-size: 0.9rem;
+    color: #64748b;
+    margin: 0;
+}
+
+/* --- STATUS BADGES --- */
+.statusContainer {
+    display: flex;
+    justify-content: center;
+    gap: 0.8rem;
+    margin-top: 1rem;
+}
+
+.statusBadge {
+    font-size: 0.75rem;
+    font-weight: 600;
+    padding: 4px 12px;
+    border-radius: 20px;
+    background: #f1f5f9;
+    color: #64748b;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    transition: all 0.3s ease;
+}
+
+.statusBadge.ready {
+    background: #dcfce7;
+    color: var(--success);
+    border: 1px solid #bbf7d0;
+}
+
+.statusBadge.error {
+    background: #fee2e2;
+    color: var(--danger);
+    border: 1px solid #fecaca;
+}
+
+/* --- CHALLENGE AREA (ICON BESAR) --- */
+.challengeArea {
+    min-height: 140px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 1rem;
+    animation: fadeIn 0.5s ease;
+}
+
+.iconCircle {
+    width: 90px;
+    height: 90px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #e0f2fe, #f0f9ff);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 10px;
+    box-shadow: 0 4px 10px rgba(56, 189, 248, 0.15);
+    border: 2px solid white;
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.challengeText {
+    font-size: 1.4rem;
+    font-weight: 800;
+    color: var(--primary);
+    margin: 0;
+    text-transform: capitalize;
+}
+
+.challengeSub {
+    font-size: 0.85rem;
+    color: #94a3b8;
+    margin-top: 4px;
+}
+
+/* --- CAMERA WRAPPER --- */
+.cameraWrapper {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 3/4; /* Rasio Portrait agar pas di HP */
+    background: #0f172a;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: inset 0 0 20px rgba(0,0,0,0.5);
+    margin-bottom: 1.5rem;
+    border: 4px solid #fff;
+}
+
+.webcamVideo {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transform: scaleX(-1); /* Mirror effect */
+}
+
+/* Overlay Kotak Wajah (Guide) */
+.faceOverlay {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 60%;
+    height: 70%;
+    border: 2px dashed rgba(255, 255, 255, 0.5);
+    border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%; /* Bentuk Telur */
+    box-shadow: 0 0 0 999px rgba(0, 0, 0, 0.4);
+    z-index: 10;
+    transition: all 0.3s;
+}
+
+.faceOverlay.active {
+    border-color: var(--success);
+    border-style: solid;
+    border-width: 3px;
+    box-shadow: 0 0 30px rgba(16, 185, 129, 0.4), 0 0 0 999px rgba(0, 0, 0, 0.5);
+}
+
+/* Loading Overlay */
+.loadingOverlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(255, 255, 255, 0.9);
+    z-index: 20;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: var(--dark);
+    font-weight: 600;
+}
+
+/* --- DEBUG INFO (KECIL DI BAWAH) --- */
+.debugPill {
+    position: absolute;
+    bottom: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(0, 0, 0, 0.6);
+    color: white;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 0.7rem;
+    font-family: monospace;
+    z-index: 15;
+    backdrop-filter: blur(4px);
+    white-space: nowrap;
+}
+
+/* --- STEP DOTS --- */
+.stepsContainer {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    margin-bottom: 1.5rem;
+}
+
+.stepDot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #cbd5e1;
+    transition: all 0.3s ease;
+}
+
+.stepDot.active {
+    background: var(--primary);
+    transform: scale(1.3);
+    box-shadow: 0 0 10px rgba(37, 99, 235, 0.4);
+}
+
+/* --- BUTTONS --- */
+.btnCancel {
+    background: transparent;
+    color: #64748b;
+    border: 1px solid #cbd5e1;
+    padding: 12px 24px;
+    border-radius: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    width: 100%;
+    transition: all 0.2s;
+}
+
+.btnCancel:hover {
+    background: #f1f5f9;
+    color: var(--dark);
+}
+
+/* --- ERROR BOX --- */
+.errorBox {
+    background: #fef2f2;
+    border: 1px solid #fecaca;
+    color: var(--danger);
+    padding: 10px;
+    border-radius: 10px;
+    font-size: 0.85rem;
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Responsive Adjustments */
+@media (max-width: 480px) {
+    .attendanceCard {
+        padding: 1.5rem;
+        border-radius: 0; /* Full screen di HP kecil */
+        min-height: 100vh;
+        box-shadow: none;
+        border: none;
+    }
+    .pageContainer {
+        padding: 0;
+        background: white;
+    }
+}

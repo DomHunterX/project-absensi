@@ -1,0 +1,457 @@
+/* src/components/admin/MajorManagement.module.css */
+
+/* --- VARIABEL TEMA --- */
+:root {
+    --primary-blue: #2196F3;
+    --primary-dark: #1976D2;
+    --primary-light: #BBDEFB;
+    --text-dark: #1e293b;
+    --text-grey: #64748b;
+    --bg-light: #f8fafc;
+    --card-bg: #ffffff;
+    --danger: #ef4444;      /* Merah */
+    --success: #10b981;     /* Hijau */
+    
+    /* ▼▼▼ TAMBAHKAN WARNA KUNING ▼▼▼ */
+    --warning: #f59e0b;     /* Kuning/Amber */
+    
+    --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+    --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+    --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+}
+
+.pageContainer {
+    padding-bottom: 3rem;
+    animation: fadeIn 0.5s ease-out;
+}
+
+/* --- HEADER SECTION --- */
+.headerSection {
+    background: linear-gradient(135deg, var(--primary-blue), var(--primary-dark));
+    padding: 2rem;
+    border-radius: 16px;
+    color: white;
+    margin-bottom: 2rem;
+    box-shadow: var(--shadow-md);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.titleGroup h1 {
+    font-size: 1.8rem;
+    font-weight: 700;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.titleGroup p {
+    margin: 5px 0 0 0;
+    opacity: 0.9;
+    font-size: 0.95rem;
+}
+
+/* --- ACTION BUTTONS (Header) --- */
+.headerActions {
+    display: flex;
+    gap: 10px;
+}
+
+.btnAdd {
+    background: rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    color: white;
+    padding: 10px 16px;
+    border-radius: 10px;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.2s;
+}
+
+.btnAdd:hover {
+    background: white;
+    color: var(--primary-blue);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+/* --- FORM CARD (Floating Form) --- */
+.formContainer {
+    background: var(--card-bg);
+    border-radius: 16px;
+    padding: 2rem;
+    box-shadow: var(--shadow-lg);
+    margin-bottom: 2rem;
+    border: 1px solid #e2e8f0;
+    animation: slideDown 0.3s ease-out;
+}
+
+.formHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+    border-bottom: 1px solid #e2e8f0;
+    padding-bottom: 1rem;
+}
+
+.formHeader h3 {
+    margin: 0;
+    color: var(--text-dark);
+    font-size: 1.25rem;
+}
+
+.closeBtn {
+    background: none;
+    border: none;
+    color: var(--text-grey);
+    cursor: pointer;
+    padding: 5px;
+    border-radius: 50%;
+    transition: background 0.2s;
+}
+
+.closeBtn:hover {
+    background: #f1f5f9;
+    color: var(--danger);
+}
+
+.formGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1.5rem;
+}
+
+.inputGroup {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.inputGroup label {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--text-dark);
+}
+
+.inputField, .selectField {
+    padding: 12px;
+    border: 1px solid #cbd5e1;
+    border-radius: 10px;
+    font-size: 0.95rem;
+    transition: all 0.2s;
+    background: #f8fafc;
+}
+
+.inputField:focus, .selectField:focus {
+    outline: none;
+    border-color: var(--primary-blue);
+    background: white;
+    box-shadow: 0 0 0 3px rgba(33, 150, 243, 0.1);
+}
+
+.mapPreviewGroup {
+    display: flex;
+    gap: 10px;
+}
+
+.btnMap {
+    background: var(--primary-blue);
+    color: white;
+    border: none;
+    border-radius: 10px;
+    width: 45px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.btnMap:hover {
+    background: var(--primary-dark);
+}
+
+.btnSubmit {
+    background: var(--primary-blue);
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 10px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    align-self: flex-end; /* Agar tombol sejajar bawah */
+    height: 46px; /* Samakan tinggi dengan input */
+}
+
+.btnSubmit:hover {
+    background: var(--primary-dark);
+    box-shadow: var(--shadow-md);
+}
+
+/* --- GRID LAYOUT UNTUK JURUSAN --- */
+.majorsGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+    gap: 1.5rem;
+}
+
+/* --- MAJOR CARD DESIGN --- */
+.majorCard {
+    background: var(--card-bg);
+    border-radius: 16px;
+    box-shadow: var(--shadow-sm);
+    border: 1px solid #e2e8f0;
+    transition: all 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.majorCard:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-lg);
+    border-color: var(--primary-light);
+}
+
+.cardHeader {
+    padding: 1.5rem;
+    background: white;
+    border-bottom: 1px solid #f1f5f9;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+}
+
+.majorIconWrapper {
+    width: 48px;
+    height: 48px;
+    background: var(--primary-light);
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--primary-dark);
+    margin-right: 1rem;
+}
+
+.majorInfo h3 {
+    margin: 0 0 5px 0;
+    font-size: 1.1rem;
+    color: var(--text-dark);
+}
+
+.locationBadge {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 0.8rem;
+    color: var(--text-grey);
+    background: #f1f5f9;
+    padding: 4px 8px;
+    border-radius: 6px;
+    margin-top: 5px;
+}
+
+.cardActions {
+    display: flex;
+    gap: 5px;
+}
+
+.actionIconBtn {
+    background: transparent;
+    border: none;
+    color: var(--text-grey);
+    padding: 6px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.actionIconBtn:hover {
+    background: #f1f5f9;
+    color: var(--primary-blue);
+}
+
+.actionIconBtn.edit:hover {
+    background: #fffbeb; /* Latar kuning sangat muda */
+    color: var(--warning); /* Ikon kuning */
+}
+
+.actionIconBtn.delete:hover {
+    background: #fee2e2;
+    color: var(--danger);
+}
+
+/* --- STUDY PROGRAMS LIST (Within Card) --- */
+.cardBody {
+    padding: 1.5rem;
+    background: #fafafa;
+    flex-grow: 1;
+}
+
+.programListHeader {
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    color: var(--text-grey);
+    letter-spacing: 0.05em;
+    margin-bottom: 10px;
+    font-weight: 700;
+}
+
+.programTags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.programTag {
+    background: white;
+    border: 1px solid #e2e8f0;
+    color: var(--text-dark);
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.2s;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.03);
+}
+
+.programTag:hover {
+    border-color: var(--primary-light);
+    transform: translateY(-1px);
+}
+
+.deleteProgBtn {
+    border: none;
+    background: none;
+    color: #94a3b8;
+    cursor: pointer;
+    padding: 0;
+    display: flex;
+    align-items: center;
+}
+
+.deleteProgBtn:hover {
+    color: var(--danger);
+}
+
+.emptyPrograms {
+    font-size: 0.85rem;
+    color: var(--text-grey);
+    font-style: italic;
+    text-align: center;
+    padding: 1rem 0;
+}
+
+/* --- MODAL MAPS --- */
+.modalOverlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(4px);
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    animation: fadeIn 0.2s ease-out;
+}
+
+.mapModal {
+    background: white;
+    width: 90%;
+    max-width: 800px;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+    display: flex;
+    flex-direction: column;
+}
+
+.mapHeader {
+    padding: 1.5rem;
+    border-bottom: 1px solid #e2e8f0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.mapHeader h3 {
+    margin: 0;
+    font-size: 1.2rem;
+}
+
+.mapContainer {
+    height: 400px;
+    width: 100%;
+    background: #e2e8f0;
+}
+
+.mapFooter {
+    padding: 1rem 1.5rem;
+    background: #f8fafc;
+    border-top: 1px solid #e2e8f0;
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+}
+
+.btnCancel {
+    padding: 10px 20px;
+    border: 1px solid #cbd5e1;
+    background: white;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+    color: var(--text-dark);
+}
+
+.btnSave {
+    padding: 10px 20px;
+    background: var(--primary-blue);
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+    color: white;
+}
+
+/* --- ANIMATIONS --- */
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes slideDown {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* --- RESPONSIVE --- */
+@media (max-width: 768px) {
+    .headerSection {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    
+    .headerActions {
+        width: 100%;
+        margin-top: 1rem;
+    }
+    
+    .btnAdd {
+        flex: 1;
+        justify-content: center;
+    }
+}

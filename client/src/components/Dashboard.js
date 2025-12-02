@@ -7,7 +7,7 @@ import styles from './Dashboard.module.css';
 const Dashboard = () => {
     const [user, setUser] = useState(null);
     const navigate = useNavigate();
-    const BASE_URL = 'http://localhost:5000';
+    const BASE_URL = 'https://absensi-polinela.site';
 
     // Fetch user profile
 // Fetch user profile (DIPERBAIKI ENDPOINT)

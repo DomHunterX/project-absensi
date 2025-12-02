@@ -20,7 +20,7 @@ const Login = () => {
     const navigate = useNavigate();
     
     // Ini adalah URL backend Anda dari file asli
-    const BASE_URL = 'http://localhost:5000';
+    const BASE_URL = 'https://absensi-polinela.site';
 
     const handleSubmit = async (e) => {
         e.preventDefault();

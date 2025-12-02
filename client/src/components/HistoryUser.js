@@ -28,7 +28,7 @@ const HistoryUser = () => {
                     setLoadingHistory(false);
                     return;
                 }
-                const res = await axios.get('http://localhost:5000/api/attendance/history', {
+                const res = await axios.get('https://absensi-polinela.site/api/attendance/history', {
                     headers: { 'Authorization': `Bearer ${token}` }
                 });
                 setHistory(res.data);

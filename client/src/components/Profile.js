@@ -14,7 +14,7 @@ const Profile = () => {
     const [loading, setLoading] = useState(false);
 
     const token = localStorage.getItem('token');
-    const BASE_URL = 'http://localhost:5000';
+    const BASE_URL = 'https://absensi-polinela.site';
     const api = axios.create({ baseURL: BASE_URL, headers: { Authorization: `Bearer ${token}` } });
 
     useEffect(() => { fetchProfile(); }, []);

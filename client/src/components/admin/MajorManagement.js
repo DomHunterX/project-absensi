@@ -17,7 +17,7 @@ import {
 } from 'lucide-react';
 import styles from './MajorManagement.module.css';
 
-const BASE_URL = 'http://localhost:5000';
+const BASE_URL = 'https://absensi-polinela.site';
 
 // Konfigurasi Icon Leaflet
 delete L.Icon.Default.prototype._getIconUrl;

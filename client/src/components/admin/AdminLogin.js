@@ -18,7 +18,7 @@ const AdminLogin = () => {
 
         try {
             // Kita akan gunakan endpoint login yang sama, tapi nanti kita bisa bedakan rolenya
-            const res = await axios.post('http://localhost:5000/api/auth/login', {
+            const res = await axios.post('https://absensi-polinela.site/api/auth/login', {
                 email,
                 password,
             });

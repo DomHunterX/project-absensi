@@ -21,7 +21,7 @@ const DashboardAdmin = () => {
         const fetchStats = async () => {
             try {
                 const token = localStorage.getItem('token');
-                const res = await axios.get('http://localhost:5000/api/dashboard/stats', {
+                const res = await axios.get('https://absensi-polinela.site/api/dashboard/stats', {
                     headers: { Authorization: `Bearer ${token}` }
                 });
                 setStats(res.data);

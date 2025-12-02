@@ -6,7 +6,7 @@ import axios from 'axios';
 import { Users, RefreshCw, Loader, Edit, Trash2, X, ChevronLeft, ChevronRight, Plus } from 'lucide-react'; 
 import styles from './UserManagement.module.css';
 
-const BASE_URL = 'http://localhost:5000';
+const BASE_URL = 'https://absensi-polinela.site';
 
 const UserManagement = () => {
     const [users, setUsers] = useState([]);

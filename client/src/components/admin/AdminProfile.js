@@ -18,7 +18,7 @@ const AdminProfile = () => {
     const [message, setMessage] = useState({ text: '', type: '' }); // type: 'success' | 'error'
     const [loading, setLoading] = useState(false);
 
-    const BASE_URL = 'http://localhost:5000';
+    const BASE_URL = 'https://absensi-polinela.site';
     const token = localStorage.getItem('token');
 
     // 1. Ambil Data Diri

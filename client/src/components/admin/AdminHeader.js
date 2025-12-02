@@ -36,7 +36,7 @@ const AdminHeader = () => {
             try {
                 const token = localStorage.getItem('token');
                 if (!token) return;
-                const res = await axios.get('http://localhost:5000/api/users/me', {
+                const res = await axios.get('https://absensi-polinela.site/api/users/me', {
                     headers: { 'Authorization': `Bearer ${token}` }
                 });
                 setAdminName(res.data.nama || 'Administrator');

@@ -32,7 +32,7 @@ const Header = ({ toggleSidebar, isMobile }) => {
             try {
                 const token = localStorage.getItem('token');
                 if (!token) return;
-                const response = await axios.get('http://localhost:5000/api/users/me', {
+                const response = await axios.get('https://absensi-polinela.site/api/users/me', {
                     headers: { Authorization: `Bearer ${token}` }
                 });
                 setUserName(response.data.nama); 

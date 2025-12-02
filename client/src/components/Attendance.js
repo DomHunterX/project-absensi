@@ -166,7 +166,8 @@ const Attendance = () => {
         if (intervalRef.current) clearInterval(intervalRef.current);
 
         intervalRef.current = setInterval(async () => {
-            if (!videoRef.current || !canvasRef.current || processingRef.current || !modelsLoaded || !isSessionActive) return;
+            if (processingRef.current) return;
+            if (!videoRef.current || !canvasRef.current || !modelsLoaded || !isSessionActive) return;
             if (videoRef.current.paused || videoRef.current.ended) return;
 
             const detections = await faceapi.detectAllFaces(videoRef.current)
@@ -204,10 +205,11 @@ const Attendance = () => {
                             stepRef.current += 1;
                             setCurrentStep(stepRef.current);
                         } else {
-                            clearInterval(intervalRef.current);
-                            processingRef.current = true;
+                            if (processingRef.current) return; 
+                            processingRef.current = true; 
+                            clearInterval(intervalRef.current); 
+                            intervalRef.current = null;
                             setIsProcessing(true);
-                            // Submit dengan Descriptor + Snapshot
                             handleAttendanceSubmit(detection.descriptor);
                         }
                     }
@@ -221,6 +223,8 @@ const Attendance = () => {
 
     // 6. Submit (DIPERBARUI DENGAN FORMDATA)
     const handleAttendanceSubmit = async (descriptor) => {
+        if (!processingRef.current) return;
+        
         try {
             // 1. Ambil Snapshot Wajah Saat Ini (Bukti Liveness)
             const photoBlob = await getSnapshot();

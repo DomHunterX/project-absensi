@@ -26,7 +26,7 @@ const AttendanceLog = () => {
     const [currentPage, setCurrentPage] = useState(1);
     const itemsPerPage = 5;
 
-    const BASE_URL = 'https://absensi-polinela.site/'; // GANTI dengan Domain Anda saat deploy
+    const BASE_URL = 'https://absensi-polinela.site'; // GANTI dengan Domain Anda saat deploy
 
     useEffect(() => {
         fetchPrograms();

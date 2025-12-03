@@ -113,6 +113,27 @@
     transition: transform 0.2s;
 }
 
+/* Tombol Hapus */
+.actionBtn.delete {
+    background-color: #fee2e2;
+    color: var(--danger);
+}
+.actionBtn.delete:hover {
+    background-color: #fecaca;
+    transform: scale(1.05);
+}
+
+/* Dots Pagination */
+.pageBtn.dots {
+    border: none;
+    background: transparent;
+    cursor: default;
+    color: var(--text-grey);
+}
+.pageBtn.dots:hover {
+    background: transparent;
+}
+
 .exportBtn:hover:not(:disabled) {
     transform: translateY(-2px);
     box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);

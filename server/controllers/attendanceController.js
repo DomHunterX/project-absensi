@@ -220,3 +220,27 @@ exports.getAttendanceHistory = async (req, res) => {
         res.status(500).send('Server Error');
     }
 };
+
+exports.deleteAttendance = async (req, res) => {
+    const { id } = req.params;
+    try {
+        const attendance = await Attendance.findByPk(id);
+        if (!attendance) {
+            return res.status(404).json({ msg: 'Data absensi tidak ditemukan.' });
+        }
+
+        // Hapus file foto jika ada
+        if (attendance.bukti_foto) {
+            const filePath = path.join(__dirname, '..', attendance.bukti_foto);
+            if (fs.existsSync(filePath)) {
+                fs.unlinkSync(filePath);
+            }
+        }
+
+        await attendance.destroy();
+        res.json({ msg: 'Data absensi berhasil dihapus.' });
+    } catch (err) {
+        console.error(err);
+        res.status(500).send('Server Error');
+    }
+};

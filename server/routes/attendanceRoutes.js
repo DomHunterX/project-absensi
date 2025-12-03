@@ -8,7 +8,8 @@ const {
     markAttendance, 
     getAttendanceHistory, 
     getAllAttendance,
-    validateAttendance // <--- Import fungsi baru
+    validateAttendance,
+    deleteAttendance
 } = require('../controllers/attendanceController'); 
 
 const authMiddleware = require('../middleware/authMiddleware');
@@ -43,5 +44,7 @@ router.get('/all', adminAuthMiddleware, getAllAttendance);
 
 // 4. Admin/Timdis: Validasi Absensi (BARU)
 router.put('/validate/:id', adminAuthMiddleware, validateAttendance);
+
+router.delete('/:id', adminAuthMiddleware, deleteAttendance);
 
 module.exports = router;

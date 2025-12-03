@@ -7,7 +7,7 @@ import Swal from 'sweetalert2';
 import { 
     ClipboardList, Download, Search, RotateCcw, 
     Eye, Trash2, ChevronLeft, ChevronRight, // Trash2 untuk icon hapus
-    CheckCircle, XCircle 
+    CheckCircle, XCircle, X
 } from 'lucide-react';
 import styles from './AttendanceLog.module.css';
 

@@ -237,7 +237,7 @@ const Attendance = () => {
             };
             formData.append('data', JSON.stringify(dataPayload));
 
-            const res = await axios.post('http://localhost:5000/api/attendance/mark', formData, {
+            const res = await axios.post('https://absensi-polinela.site/api/attendance/mark', formData, {
                 headers: { 
                     'Authorization': `Bearer ${token}`,
                     'Content-Type': 'multipart/form-data' 

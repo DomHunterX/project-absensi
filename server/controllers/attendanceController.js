@@ -8,7 +8,7 @@ const StudyProgram = require('../models/StudyProgram');
 const Major = require('../models/Major');            
 const { Op } = require('sequelize'); 
 
-const FACE_DISTANCE_THRESHOLD = 0.5; 
+const FACE_DISTANCE_THRESHOLD = 0.6; 
 faceapi.env.monkeyPatch({ Canvas, Image, ImageData });
 
 // Memuat model AI saat server pertama kali dijalankan

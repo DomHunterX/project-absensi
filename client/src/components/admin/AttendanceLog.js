@@ -122,7 +122,37 @@ const AttendanceLog = () => {
         }
     };
 
-    const handleExport = () => { /* ... kode export tetap sama ... */ };
+    const handleExport = () => {
+        try {
+            // Cek data dulu
+            if (!log || log.length === 0) {
+                Swal.fire('Info', 'Tidak ada data untuk diekspor.', 'info');
+                return;
+            }
+
+            const dataToExport = log.map(item => ({
+                'Nama': item.User?.nama || 'N/A',
+                'NPM': item.User?.npm || 'N/A',
+                'Kelas': item.User?.kelas || '-',
+                'Prodi': item.User?.StudyProgram?.name || '-',
+                'Waktu': new Date(item.date).toLocaleString('id-ID'),
+                'Status': item.status
+            }));
+
+            const ws = XLSX.utils.json_to_sheet(dataToExport);
+            const wb = XLSX.utils.book_new();
+            XLSX.utils.book_append_sheet(wb, ws, 'Rekap');
+            
+            // Nama file dinamis
+            const safeKelas = filterKelas ? filterKelas.replace(/[^a-z0-9]/gi, '_') : 'Semua';
+            XLSX.writeFile(wb, `Rekap_Absensi_${safeKelas}.xlsx`);
+            
+        } catch (error) {
+            console.error("Export Error:", error);
+            Swal.fire('Gagal Export', 'Terjadi kesalahan saat membuat file Excel.', 'error');
+        }
+    };
+    
     const getStatusClass = (status) => {
         if (status === 'Hadir') return '';
         if (status === 'Menunggu Validasi') return styles.pending;

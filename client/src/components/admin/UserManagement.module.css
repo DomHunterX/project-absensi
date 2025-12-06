@@ -100,9 +100,19 @@
 @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
 /* --- MOBILE SPECIFIC --- */
-@media (max-width: 640px) {
-    .headerSection { flex-direction: column; align-items: flex-start; }
-    .headerActions { width: 100%; margin-top: 10px; }
-    .refreshBtn { flex: 1; justify-content: center; }
-    .modalContent { padding: 1.5rem; }
+@media (max-width: 900px) {
+    .userTable th:last-child,
+    .userTable td:last-child {
+        position: sticky;
+        right: 0;
+        background-color: #ffffff;
+        box-shadow: -4px 0 8px rgba(0, 0, 0, 0.05);
+        z-index: 10;
+    }
+    .userTableRow:hover td:last-child {
+        background-color: #f8fafc;
+    }
+    .userTable th:last-child {
+        background-color: #f8fafc;
+    }
 }

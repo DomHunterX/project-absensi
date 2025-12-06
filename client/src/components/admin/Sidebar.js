@@ -25,10 +25,10 @@ const Sidebar = ({ isOpen, toggleSidebar, isMobile }) => {
 
     const menuItems = [
         { path: '/admin', name: 'Dashboard', icon: <LayoutDashboard size={20} /> },
+        { path: '/admin/profile', name: 'Profil Saya', icon: <User size={20} /> },
         { path: '/admin/majors', name: 'Manajemen Jurusan', icon: <BookOpen size={20} /> },
         { path: '/admin/rekap', name: 'Rekap Absensi', icon: <ClipboardList size={20} /> },
         { path: '/admin/users', name: 'User Management', icon: <Users size={20} /> },
-        { path: '/admin/profile', name: 'Profil Saya', icon: <User size={20} /> },
     ];
 
     return (

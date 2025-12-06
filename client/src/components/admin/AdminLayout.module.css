@@ -11,7 +11,24 @@
 .layoutContainer {
     display: flex;
     min-height: 100vh;
-    background-color: var(--background-grey); /* Latar belakang abu-abu muda */
+    background-color: #f0f2f5;
+}
+
+.mainWrapper {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    
+    /* DEFAULT: Margin kiri sebesar lebar sidebar terbuka (Desktop) */
+    margin-left: 260px; 
+    transition: margin-left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    width: 100%;
+}
+
+/* SAAT SIDEBAR MINI (Collapsed) */
+.mainWrapper.expanded {
+    margin-left: 80px; 
 }
 
 /* --- Sidebar Style --- */
@@ -102,21 +119,19 @@
 .mainContent {
     flex: 1;
     padding: 2rem;
-    max-width: 100%;
-    box-sizing: border-box; /* Penting */
+    max-width: 1600px;
+    width: 100%;
+    margin: 0 auto;
+    box-sizing: border-box;
 }
 
-/* --- Responsif --- */
-@media (max-width: 768px) {
-    .sidebar {
-        width: 100%;
-        height: auto;
-        position: relative;
+/* --- RESPONSIF MOBILE --- */
+@media (max-width: 900px) {
+    .mainWrapper {
+        margin-left: 0 !important; /* Di mobile, konten selalu full width */
     }
-    .layoutContainer {
-        flex-direction: column;
-    }
+    
     .mainContent {
-        padding: 1rem;
+        padding: 1rem; /* Padding lebih kecil */
     }
 }

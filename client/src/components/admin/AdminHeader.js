@@ -2,27 +2,22 @@
 
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { Link, useNavigate } from 'react-router-dom'; // 1. Import useNavigate
-import { Clock, User, LogOut, ChevronDown } from 'lucide-react'; // Import Icon tambahan
+import { Link, useNavigate } from 'react-router-dom'; 
+import { Clock, User, LogOut, ChevronDown, Menu } from 'lucide-react'; // Tambah icon Menu
 import styles from './AdminHeader.module.css';
 
-const AdminHeader = () => {
+// TERIMA PROP 'toggleSidebar'
+const AdminHeader = ({ toggleSidebar }) => {
     const [currentTime, setCurrentTime] = useState('');
     const [adminName, setAdminName] = useState('Admin');
-    
-    // State untuk Dropdown
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-    
-    const navigate = useNavigate(); // Hook navigasi
+    const navigate = useNavigate();
 
-    // 1. Logika Jam (Tetap)
+    // ... (Logika useEffect Jam & Fetch Profile TETAP SAMA) ...
     useEffect(() => {
         const updateTime = () => {
             const now = new Date();
-            const options = { 
-                weekday: 'long', day: 'numeric', month: 'short', year: 'numeric',
-                hour: '2-digit', minute: '2-digit', second: '2-digit' 
-            };
+            const options = { weekday: 'long', day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit' };
             setCurrentTime(now.toLocaleDateString('id-ID', options));
         };
         updateTime();
@@ -30,24 +25,20 @@ const AdminHeader = () => {
         return () => clearInterval(timer);
     }, []);
 
-    // 2. Ambil Data Admin (Tetap)
     useEffect(() => {
         const fetchAdminProfile = async () => {
             try {
                 const token = localStorage.getItem('token');
                 if (!token) return;
-                const res = await axios.get('https://absensi-polinela.site/api/users/me', {
-                    headers: { 'Authorization': `Bearer ${token}` }
-                });
+                const res = await axios.get('http://localhost:5000/api/users/me', { headers: { 'Authorization': `Bearer ${token}` } });
                 setAdminName(res.data.nama || 'Administrator');
             } catch (err) { console.error(err); }
         };
         fetchAdminProfile();
     }, []);
 
-    // 3. Fungsi Logout (Duplikat dari Sidebar)
     const handleLogout = () => {
-        if(window.confirm('Apakah Anda yakin ingin keluar?')) {
+        if(window.confirm('Yakin ingin keluar?')) {
             localStorage.removeItem('token');
             navigate('/admin/login');
         }
@@ -55,50 +46,45 @@ const AdminHeader = () => {
 
     return (
         <header className={styles.headerContainer}>
-            {/* Kiri: Jam */}
             <div className={styles.leftSection}>
+                {/* TOMBOL HAMBURGER (Untuk toggle sidebar) */}
+                <button 
+                    onClick={toggleSidebar} 
+                    style={{ 
+                        background: 'none', border: 'none', cursor: 'pointer', 
+                        marginRight: '15px', color: '#64748b', display: 'flex' 
+                    }}
+                >
+                    <Menu size={24} />
+                </button>
+
                 <div className={styles.clockWrapper}>
                     <Clock size={18} className="text-blue-500" />
-                    <span>{currentTime}</span>
+                    {/* Hide jam di layar HP kecil biar muat */}
+                    <span style={{ display: 'none', '@media(min-width: 600px)': { display: 'inline' } }}>
+                        {/* Trik CSS inline media query agak tricky di JS, lebih baik via CSS module */}
+                        {/* Gunakan class CSS untuk hide di mobile jika perlu */}
+                        {currentTime}
+                    </span>
+                    <span className={styles.hideOnMobile}>{currentTime}</span>
                 </div>
             </div>
 
-            {/* Kanan: Profil & Dropdown */}
-            {/* Tambahkan onClick untuk toggle dropdown */}
-            <div 
-                className={styles.rightSection} 
-                onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-                title="Klik untuk opsi akun"
-            >
+            <div className={styles.rightSection} onClick={() => setIsDropdownOpen(!isDropdownOpen)}>
                 <div className={styles.welcomeText}>
                     <span className={styles.greeting}>Selamat Datang,</span>
-                    <span className={styles.adminName}>{adminName}</span>
+                    <span className={styles.adminName}>{adminName.split(' ')[0]}</span>
                 </div>
-                
-                <div className={styles.avatarCircle}>
-                    <User size={20} />
-                </div>
-                
-                {/* Indikator Panah Kecil */}
+                <div className={styles.avatarCircle}><User size={20} /></div>
                 <ChevronDown size={16} color="#64748b" />
 
-                {/* --- MENU DROPDOWN --- */}
                 {isDropdownOpen && (
                     <div className={styles.dropdownMenu}>
-                        {/* Bisa tambah menu lain di sini, misal Profile */}
-                        <Link to="/admin/profile" className={styles.menuItem} style={{ textDecoration: 'none', color: '#333' }}>
-                            <User size={16} />
-                            <span>Profil Saya</span>
+                        <Link to="/admin/profile" className={styles.menuItem} style={{textDecoration:'none', color:'#333'}}>
+                            <User size={16} /> Profil Saya
                         </Link>
-                        <button 
-                            onClick={(e) => {
-                                e.stopPropagation(); // Mencegah event bubbling ke parent
-                                handleLogout();
-                            }} 
-                            className={`${styles.menuItem} ${styles.logoutBtn}`}
-                        >
-                            <LogOut size={16} />
-                            <span>Keluar</span>
+                        <button onClick={(e) => { e.stopPropagation(); handleLogout(); }} className={`${styles.menuItem} ${styles.logoutBtn}`}>
+                            <LogOut size={16} /> Keluar
                         </button>
                     </div>
                 )}

@@ -1,0 +1,160 @@
+/* src/components/admin/Sidebar.module.css */
+
+:root {
+    --sidebar-width: 260px;
+    --sidebar-mini-width: 80px;
+    --primary-blue: #2196F3;
+    --bg-hover: #f1f5f9;
+}
+
+/* --- BASE SIDEBAR --- */
+.sidebar {
+    background: #ffffff;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 100;
+    box-shadow: 2px 0 10px rgba(0,0,0,0.05);
+    transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    overflow: hidden;
+    white-space: nowrap; /* Mencegah teks turun baris saat mengecil */
+}
+
+/* Desktop: Open vs Closed */
+.sidebar.open { width: var(--sidebar-width); }
+.sidebar.closed { width: var(--sidebar-mini-width); }
+
+/* Mobile: Off-canvas logic */
+.sidebar.mobile {
+    width: var(--sidebar-width);
+    transform: translateX(-100%); /* Sembunyi ke kiri */
+    transition: transform 0.3s ease;
+}
+.sidebar.mobile.open {
+    transform: translateX(0); /* Muncul */
+}
+
+/* --- HEADER --- */
+.sidebarHeader {
+    height: 70px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-bottom: 1px solid #f1f5f9;
+    padding: 0 1rem;
+    position: relative;
+}
+
+.sidebarHeader h2 {
+    font-size: 1.4rem;
+    color: var(--primary-blue);
+    font-weight: 800;
+    margin: 0;
+    transition: opacity 0.2s;
+}
+
+.closeBtn {
+    background: none;
+    border: none;
+    position: absolute;
+    right: 15px;
+    cursor: pointer;
+    color: #64748b;
+}
+
+/* --- NAV ITEMS --- */
+.navList {
+    list-style: none;
+    padding: 1rem 0.8rem;
+    flex-grow: 1;
+    margin: 0;
+}
+
+.navItem { margin-bottom: 5px; }
+
+.navItem a {
+    display: flex;
+    align-items: center;
+    padding: 12px 14px;
+    color: #64748b;
+    text-decoration: none;
+    border-radius: 12px;
+    transition: all 0.2s;
+    font-weight: 500;
+    height: 48px; /* Fixed height agar konsisten */
+}
+
+.navItem a:hover {
+    background-color: var(--bg-hover);
+    color: var(--primary-blue);
+}
+
+.navItem a.active {
+    background-color: #eff6ff;
+    color: var(--primary-blue);
+}
+
+/* Icon & Text Handling */
+.icon {
+    min-width: 24px;
+    display: flex;
+    justify-content: center;
+}
+
+.linkText {
+    margin-left: 14px;
+    opacity: 1;
+    transition: opacity 0.2s;
+}
+
+/* Class Utility untuk Menyembunyikan Teks */
+.hideText {
+    opacity: 0;
+    width: 0;
+    display: none; /* Hilangkan dari layout */
+}
+
+/* --- FOOTER (LOGOUT) --- */
+.footer {
+    padding: 1rem 0.8rem;
+    border-top: 1px solid #f1f5f9;
+}
+
+.logoutBtn {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    padding: 12px 14px;
+    border: none;
+    background: transparent;
+    color: #ef4444;
+    border-radius: 12px;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 1rem;
+    transition: all 0.2s;
+}
+
+.logoutBtn:hover {
+    background-color: #fef2f2;
+}
+
+/* --- OVERLAY MOBILE --- */
+.overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.5);
+    z-index: 90;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s;
+    backdrop-filter: blur(2px);
+}
+
+.showOverlay {
+    opacity: 1;
+    visibility: visible;
+}

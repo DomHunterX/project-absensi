@@ -1,6 +1,5 @@
 /* src/components/admin/UserManagement.module.css */
 
-/* --- VARIABEL TEMA (Sama dengan MajorManagement) --- */
 :root {
     --primary-blue: #2196F3;
     --primary-dark: #1976D2;
@@ -11,7 +10,6 @@
     --danger: #ef4444;
     --warning: #f59e0b;
     --success: #10b981;
-    --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
 }
 
 .pageContainer {
@@ -19,35 +17,31 @@
     animation: fadeIn 0.5s ease-out;
 }
 
-/* --- HEADER SECTION (Gradient Style) --- */
+/* HEADER - Responsive Flex */
 .headerSection {
     background: linear-gradient(135deg, var(--primary-blue), var(--primary-dark));
     padding: 2rem;
     border-radius: 16px;
     color: white;
     margin-bottom: 2rem;
-    box-shadow: var(--shadow-md);
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
     display: flex;
     justify-content: space-between;
     align-items: center;
+    flex-wrap: wrap; /* Agar turun baris kalau sempit */
+    gap: 1rem;
 }
 
-.titleGroup h1 {
-    font-size: 1.8rem;
-    font-weight: 700;
-    margin: 0;
+.titleGroup h1 { font-size: 1.8rem; font-weight: 700; margin: 0; display: flex; align-items: center; gap: 12px; }
+.titleGroup p { margin: 5px 0 0 0; opacity: 0.9; font-size: 0.95rem; }
+
+/* Buttons Group */
+.headerActions {
     display: flex;
-    align-items: center;
-    gap: 12px;
+    gap: 10px;
+    flex-wrap: wrap;
 }
 
-.titleGroup p {
-    margin: 5px 0 0 0;
-    opacity: 0.9;
-    font-size: 0.95rem;
-}
-
-/* --- REFRESH BUTTON (Glass Effect) --- */
 .refreshBtn {
     background: rgba(255, 255, 255, 0.2);
     backdrop-filter: blur(10px);
@@ -57,218 +51,58 @@
     border-radius: 10px;
     font-weight: 600;
     cursor: pointer;
-    display: flex;
-    align-items: center;
-    gap: 8px;
+    display: flex; align-items: center; gap: 8px;
     transition: all 0.2s;
+    white-space: nowrap; /* Teks jangan turun baris */
 }
+.refreshBtn:hover:not(:disabled) { background: white; color: var(--primary-blue); transform: translateY(-2px); }
 
-.refreshBtn:hover:not(:disabled) {
-    background: white;
-    color: var(--primary-blue);
-    transform: translateY(-2px);
-}
-
-/* --- TABLE CARD --- */
+/* TABLE CONTAINER - SCROLLABLE */
 .tableContainer {
     background: var(--card-bg);
     border-radius: 16px;
-    box-shadow: var(--shadow-md);
-    overflow: hidden; /* Untuk border radius tabel */
+    box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
     border: 1px solid #e2e8f0;
+    overflow-x: auto; /* KUNCI RESPONSIVE TABEL */
+    -webkit-overflow-scrolling: touch; /* Smooth scroll di iOS */
 }
 
-.userTable {
-    width: 100%;
-    border-collapse: collapse;
-}
+.userTable { width: 100%; border-collapse: collapse; min-width: 800px; /* Paksa lebar minimal agar scroll muncul */ }
+.userTable thead { background-color: #f8fafc; border-bottom: 2px solid #e2e8f0; }
+.tableHeader { padding: 16px 24px; text-align: left; font-size: 0.75rem; font-weight: 700; color: var(--text-grey); text-transform: uppercase; }
+.tableCell { padding: 16px 24px; border-bottom: 1px solid #f1f5f9; color: var(--text-dark); font-size: 0.95rem; vertical-align: middle; }
+.userTableRow:hover { background-color: #f8fafc; }
 
-.userTable thead {
-    background-color: #f8fafc;
-    border-bottom: 2px solid #e2e8f0;
-}
+/* Badges */
+.roleBadge { padding: 6px 12px; border-radius: 20px; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; display: inline-block; white-space: nowrap; }
+.roleAdmin { background-color: #e0e7ff; color: #4338ca; }
+.roleTimdis { background-color: #fef3c7; color: #d97706; }
+.roleUser { background-color: #dcfce7; color: #15803d; }
+.infoSubtext { display: block; font-size: 0.8rem; color: var(--text-grey); margin-top: 2px; }
 
-.tableHeader {
-    padding: 16px 24px;
-    text-align: left;
-    font-size: 0.75rem;
-    font-weight: 700;
-    color: var(--text-grey);
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-}
+/* Action Buttons */
+.actionBtn { background: transparent; border: none; padding: 8px; border-radius: 8px; cursor: pointer; color: var(--text-grey); margin-right: 4px; }
+.actionBtn.edit:hover { background: #fffbeb; color: var(--warning); }
+.actionBtn.delete:hover { background: #fee2e2; color: var(--danger); }
 
-.tableCell {
-    padding: 16px 24px;
-    border-bottom: 1px solid #f1f5f9;
-    color: var(--text-dark);
-    font-size: 0.95rem;
-    vertical-align: middle;
-}
+/* Pagination */
+.paginationContainer { display: flex; justify-content: center; align-items: center; gap: 8px; padding: 1.5rem; border-top: 1px solid #e2e8f0; background-color: white; }
+.pageBtn { min-width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; border: 1px solid #cbd5e1; background-color: white; border-radius: 8px; cursor: pointer; }
+.pageBtn.active { background-color: var(--primary-blue); color: white; border-color: var(--primary-blue); }
 
-.userTableRow:hover {
-    background-color: #f8fafc;
-}
-
-/* --- BADGES & STATUS --- */
-.roleBadge {
-    padding: 6px 12px;
-    border-radius: 20px;
-    font-size: 0.75rem;
-    font-weight: 700;
-    text-transform: uppercase;
-    display: inline-block;
-}
-
-.roleAdmin { background-color: #e0e7ff; color: #4338ca; } /* Indigo */
-.roleTimdis { background-color: #fef3c7; color: #d97706; } /* Amber */
-.roleUser { background-color: #dcfce7; color: #15803d; } /* Green */
-
-.infoSubtext {
-    display: block;
-    font-size: 0.8rem;
-    color: var(--text-grey);
-    margin-top: 2px;
-}
-
-/* --- ACTION BUTTONS (Table) --- */
-.actionBtn {
-    background: transparent;
-    border: none;
-    padding: 8px;
-    border-radius: 8px;
-    cursor: pointer;
-    color: var(--text-grey);
-    transition: all 0.2s;
-    margin-right: 4px;
-}
-
-.actionBtn.edit:hover {
-    background: #fffbeb;
-    color: var(--warning);
-}
-
-.actionBtn.delete:hover {
-    background: #fee2e2;
-    color: var(--danger);
-}
-
-/* --- MODAL STYLES --- */
-.modalOverlay {
-    position: fixed;
-    inset: 0;
-    background: rgba(0, 0, 0, 0.6);
-    backdrop-filter: blur(4px);
-    z-index: 1000;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    animation: fadeIn 0.2s ease-out;
-}
-
-.modalContent {
-    background: white;
-    width: 90%;
-    max-width: 500px;
-    border-radius: 16px;
-    padding: 2rem;
-    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
-}
-
-.modalHeader {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 1.5rem;
-    padding-bottom: 1rem;
-    border-bottom: 1px solid #e2e8f0;
-}
-
-.modalHeader h3 { margin: 0; color: var(--text-dark); }
-
-.closeBtn {
-    background: none;
-    border: none;
-    cursor: pointer;
-    color: var(--text-grey);
-}
-
-.inputField {
-    width: 100%;
-    padding: 12px;
-    border: 1px solid #cbd5e1;
-    border-radius: 8px;
-    margin-bottom: 1rem;
-    margin-top: 6px;
-    font-size: 0.95rem;
-    background: #f8fafc;
-}
-
-.inputField:focus {
-    outline: none;
-    border-color: var(--primary-blue);
-    background: white;
-    box-shadow: 0 0 0 3px rgba(33, 150, 243, 0.1);
-}
-
-.submitBtn {
-    width: 100%;
-    padding: 12px;
-    background: var(--primary-blue);
-    color: white;
-    border: none;
-    border-radius: 8px;
-    font-weight: 600;
-    cursor: pointer;
-    margin-top: 10px;
-    transition: background 0.2s;
-}
-
-.paginationContainer {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 8px;
-    padding: 1.5rem;
-    border-top: 1px solid #e2e8f0;
-    background-color: white;
-}
-
-.pageBtn {
-    min-width: 36px;
-    height: 36px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border: 1px solid #cbd5e1;
-    background-color: white;
-    border-radius: 8px;
-    cursor: pointer;
-    font-size: 0.9rem;
-    font-weight: 600;
-    color: var(--text-grey);
-    transition: all 0.2s;
-}
-
-.pageBtn:hover:not(:disabled) {
-    border-color: var(--primary-blue);
-    color: var(--primary-blue);
-    background-color: #eff6ff;
-}
-
-.pageBtn.active {
-    background-color: var(--primary-blue);
-    color: white;
-    border-color: var(--primary-blue);
-    box-shadow: 0 4px 6px -1px rgba(33, 150, 243, 0.3);
-}
-
-.pageBtn:disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
-    background-color: #f1f5f9;
-}
-
-.submitBtn:hover { background: var(--primary-dark); }
+/* MODAL Responsive */
+.modalOverlay { position: fixed; inset: 0; background: rgba(0, 0, 0, 0.6); z-index: 1000; display: flex; align-items: center; justify-content: center; padding: 1rem; }
+.modalContent { background: white; width: 100%; max-width: 500px; border-radius: 16px; padding: 2rem; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1); max-height: 90vh; overflow-y: auto; }
+.modalHeader { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; padding-bottom: 1rem; border-bottom: 1px solid #e2e8f0; }
+.inputField { width: 100%; padding: 12px; border: 1px solid #cbd5e1; border-radius: 8px; margin-bottom: 1rem; font-size: 0.95rem; background: #f8fafc; }
+.submitBtn { width: 100%; padding: 12px; background: var(--primary-blue); color: white; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; margin-top: 10px; }
 
 @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+/* --- MOBILE SPECIFIC --- */
+@media (max-width: 640px) {
+    .headerSection { flex-direction: column; align-items: flex-start; }
+    .headerActions { width: 100%; margin-top: 10px; }
+    .refreshBtn { flex: 1; justify-content: center; }
+    .modalContent { padding: 1.5rem; }
+}

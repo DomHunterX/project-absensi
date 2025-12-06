@@ -12,9 +12,10 @@
 .header h1 { font-size: 1.8rem; color: #1e293b; margin: 0; }
 .header p { color: #64748b; margin: 5px 0 0 0; }
 
-/* STATS GRID */
+/* STATS GRID - Responsive */
 .statsGrid {
     display: grid;
+    /* Auto-fit: Otomatis turun ke bawah jika layar sempit */
     grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
     gap: 1.5rem;
     margin-bottom: 2rem;
@@ -31,20 +32,16 @@
     gap: 1rem;
     transition: transform 0.2s;
 }
-
 .statCard:hover { transform: translateY(-3px); box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1); }
 
-/* Warna Icon Background */
 .iconBox {
     width: 50px; height: 50px; border-radius: 12px;
-    display: flex;
-    align-items: center;     /* Bukan alignItems */
-    justify-content: center; /* Bukan justifyContent */
-    font-size: 1.5rem;
+    display: flex; alignItems: center; justifyContent: center;
+    font-size: 1.5rem; flex-shrink: 0; /* Agar ikon tidak gepeng */
 }
 .blue { background: #e0f2fe; color: #0284c7; }
 .green { background: #dcfce7; color: #16a34a; }
-.orange { background: #ffedd5; color: #ea580c; } /* Khusus Pending */
+.orange { background: #ffedd5; color: #ea580c; }
 .purple { background: #f3e8ff; color: #9333ea; }
 
 .statInfo h3 { margin: 0; font-size: 1.8rem; font-weight: 800; color: #1e293b; }
@@ -53,7 +50,7 @@
 /* SECTION BAWAH */
 .bottomSection {
     display: grid;
-    grid-template-columns: 2fr 1fr; /* Grafik lebih lebar dari List */
+    grid-template-columns: 2fr 1fr; /* Default Desktop */
     gap: 2rem;
 }
 
@@ -63,6 +60,7 @@
     padding: 1.5rem;
     box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
     border: 1px solid #e2e8f0;
+    overflow: hidden; /* Mencegah grafik keluar */
 }
 
 .cardTitle { font-size: 1.1rem; font-weight: 700; color: #1e293b; margin-bottom: 1.5rem; }
@@ -79,11 +77,21 @@
 
 .userName { font-weight: 600; color: #334155; display: block; }
 .userMeta { font-size: 0.8rem; color: #94a3b8; }
-.statusTag { padding: 4px 10px; border-radius: 20px; font-size: 0.75rem; font-weight: 600; }
+.statusTag { padding: 4px 10px; border-radius: 20px; font-size: 0.75rem; font-weight: 600; white-space: nowrap; }
 .tagPending { background: #fff7ed; color: #c2410c; }
 .tagHadir { background: #f0fdf4; color: #15803d; }
 
-@media (max-width: 900px) {
-    .bottomSection { grid-template-columns: 1fr; }
-}
 @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+/* --- MOBILE RESPONSIVE --- */
+@media (max-width: 900px) {
+    .bottomSection {
+        grid-template-columns: 1fr; /* Stack vertikal */
+    }
+    
+    .statsGrid {
+        grid-template-columns: 1fr; /* Satu kolom per baris di HP */
+    }
+    
+    .header h1 { font-size: 1.5rem; }
+}

@@ -1,4 +1,4 @@
-// src/components/Attendance.js (FINAL: WITH PHOTO EVIDENCE & FORMDATA)
+// src/components/Attendance.js (PERFORMANCE MODE: TINY FACE DETECTOR)
 
 import React, { useRef, useState, useEffect, useCallback } from 'react';
 import * as faceapi from 'face-api.js';
@@ -24,16 +24,18 @@ const CHALLENGES = [
     { type: 'turn_left', text: 'Tengok Kiri', icon: <ArrowLeft size={48} className="text-blue-500" /> }
 ];
 
+// Opsi Deteksi Wajah Ringan (Tiny)
+// inputSize: 224 adalah yang paling ringan. Bisa dinaikkan ke 320 atau 416 jika akurasi kurang.
+const TINY_OPTIONS = new faceapi.TinyFaceDetectorOptions({ inputSize: 224, scoreThreshold: 0.5 });
+
 const Attendance = () => {
     const videoRef = useRef(null);
     const canvasRef = useRef(null);
     
-    // --- REFS ---
     const stepRef = useRef(0);
     const processingRef = useRef(false);
     const intervalRef = useRef(null);
     
-    // --- STATE ---
     const [isSessionActive, setIsSessionActive] = useState(false);
     const [modelsLoaded, setModelsLoaded] = useState(false);
     const [location, setLocation] = useState(null);
@@ -90,7 +92,16 @@ const Attendance = () => {
     }, []);
 
     const startVideo = () => {
-        navigator.mediaDevices.getUserMedia({ video: { facingMode: 'user' } })
+        // PERBAIKAN: Paksa resolusi rendah (640x480) agar ringan di HP kentang
+        const constraints = {
+            video: {
+                facingMode: 'user',
+                width: { ideal: 640 },
+                height: { ideal: 480 }
+            }
+        };
+
+        navigator.mediaDevices.getUserMedia(constraints)
             .then(stream => { if (videoRef.current) videoRef.current.srcObject = stream; })
             .catch(err => {
                 console.error(err);
@@ -98,20 +109,21 @@ const Attendance = () => {
             });
     };
 
-    // 3. Load Models
+    // 3. Load Models (Ganti SSD ke TinyFaceDetector)
     useEffect(() => {
         const loadModels = async () => {
             const MODEL_URL = '/models'; 
             try {
                 await Promise.all([
-                    faceapi.nets.ssdMobilenetv1.loadFromUri(MODEL_URL),
+                    // GANTI SSD DENGAN TINY
+                    faceapi.nets.tinyFaceDetector.loadFromUri(MODEL_URL), 
                     faceapi.nets.faceLandmark68Net.loadFromUri(MODEL_URL),
                     faceapi.nets.faceRecognitionNet.loadFromUri(MODEL_URL),
                     faceapi.nets.faceExpressionNet.loadFromUri(MODEL_URL)
                 ]);
                 setModelsLoaded(true);
             } catch (err) {
-                Swal.fire('System Error', 'Gagal memuat AI Models', 'error');
+                Swal.fire('System Error', 'Gagal memuat AI Models. Pastikan file model lengkap.', 'error');
             }
         };
         loadModels();
@@ -119,33 +131,21 @@ const Attendance = () => {
     }, [stopCameraAndLoop]);
 
     useEffect(() => {
-        if (modelsLoaded && isSessionActive) {
-            startSession();
-        }
+        if (modelsLoaded && isSessionActive) startSession();
     }, [modelsLoaded, isSessionActive, startSession]);
 
-    // 4. Capture Snapshot (FUNGSI BARU)
+    // 4. Capture Snapshot
     const getSnapshot = () => {
         if (!videoRef.current) return null;
-        
         const video = videoRef.current;
         const canvas = document.createElement('canvas');
         canvas.width = video.videoWidth;
         canvas.height = video.videoHeight;
-        
-        // Gambar frame video ke canvas sementara
         const ctx = canvas.getContext('2d');
-        // Flip horizontal agar sesuai tampilan mirror pengguna
         ctx.translate(canvas.width, 0);
         ctx.scale(-1, 1);
         ctx.drawImage(video, 0, 0);
-        
-        // Konversi ke Blob (File)
-        return new Promise(resolve => {
-            canvas.toBlob(blob => {
-                resolve(blob);
-            }, 'image/jpeg', 0.8); // Kualitas 80%
-        });
+        return new Promise(resolve => canvas.toBlob(resolve, 'image/jpeg', 0.7)); // Kompresi 70% biar ringan uploadnya
     };
 
     // 5. Logic Deteksi
@@ -165,12 +165,13 @@ const Attendance = () => {
     const handleVideoOnPlay = () => {
         if (intervalRef.current) clearInterval(intervalRef.current);
 
+        // PERBAIKAN: Interval diperlambat sedikit (500ms -> 700ms) untuk memberi nafas CPU
         intervalRef.current = setInterval(async () => {
-            if (processingRef.current) return;
-            if (!videoRef.current || !canvasRef.current || !modelsLoaded || !isSessionActive) return;
+            if (!videoRef.current || !canvasRef.current || processingRef.current || !modelsLoaded || !isSessionActive) return;
             if (videoRef.current.paused || videoRef.current.ended) return;
 
-            const detections = await faceapi.detectAllFaces(videoRef.current)
+            // PERBAIKAN: Gunakan TINY_OPTIONS
+            const detections = await faceapi.detectAllFaces(videoRef.current, TINY_OPTIONS)
                 .withFaceLandmarks()
                 .withFaceDescriptors()
                 .withFaceExpressions();
@@ -205,10 +206,8 @@ const Attendance = () => {
                             stepRef.current += 1;
                             setCurrentStep(stepRef.current);
                         } else {
-                            if (processingRef.current) return; 
-                            processingRef.current = true; 
-                            clearInterval(intervalRef.current); 
-                            intervalRef.current = null;
+                            clearInterval(intervalRef.current);
+                            processingRef.current = true;
                             setIsProcessing(true);
                             handleAttendanceSubmit(detection.descriptor);
                         }
@@ -218,39 +217,30 @@ const Attendance = () => {
                 setFaceDetected(false);
                 setDebugInfo("Wajah tidak terdeteksi");
             }
-        }, 500);
+        }, 700); // 700ms (Lebih ringan)
     };
 
-    // 6. Submit (DIPERBARUI DENGAN FORMDATA)
+    // 6. Submit
     const handleAttendanceSubmit = async (descriptor) => {
-        if (!processingRef.current) return;
-        
-        try {
-            // 1. Ambil Snapshot Wajah Saat Ini (Bukti Liveness)
-            const photoBlob = await getSnapshot();
-            
-            if (!photoBlob) {
-                throw new Error("Gagal mengambil foto bukti.");
-            }
+        if (!processingRef.current) return; 
 
-            // 2. Siapkan FormData
+        try {
+            const photoBlob = await getSnapshot();
+            if (!photoBlob) throw new Error("Gagal foto.");
+
             const formData = new FormData();
+            formData.append('image', photoBlob, 'proof.jpg');
             
-            // Masukkan File Foto
-            formData.append('image', photoBlob, 'attendance_proof.jpg');
-            
-            // Masukkan Data (Descriptor & Lokasi) sebagai JSON String
             const dataPayload = {
                 descriptor: Array.from(descriptor),
                 location: location
             };
             formData.append('data', JSON.stringify(dataPayload));
 
-            // 3. Kirim ke Server
-            const res = await axios.post('https://absensi-polinela.site/api/attendance/mark', formData, {
+            const res = await axios.post('http://localhost:5000/api/attendance/mark', formData, {
                 headers: { 
                     'Authorization': `Bearer ${token}`,
-                    'Content-Type': 'multipart/form-data' // Penting!
+                    'Content-Type': 'multipart/form-data' 
                 }
             });
 
@@ -259,7 +249,7 @@ const Attendance = () => {
             await Swal.fire({
                 icon: 'success',
                 title: 'Berhasil Terkirim!',
-                text: 'Absensi Anda sedang divalidasi oleh Timdis.', // Pesan baru
+                text: 'Absensi Anda sedang divalidasi oleh Timdis.',
                 confirmButtonText: 'Lihat Status',
                 confirmButtonColor: '#10b981'
             });
@@ -268,6 +258,7 @@ const Attendance = () => {
         } catch (err) {
             stopCameraAndLoop();
             setIsSessionActive(false);
+            processingRef.current = false; 
 
             Swal.fire({
                 icon: 'error',
@@ -276,9 +267,7 @@ const Attendance = () => {
                 confirmButtonText: 'Coba Lagi',
                 confirmButtonColor: '#ef4444'
             }).then((result) => {
-                if (result.isConfirmed) {
-                    setIsSessionActive(true);
-                }
+                if (result.isConfirmed) setIsSessionActive(true);
             });
         }
     };
@@ -293,10 +282,13 @@ const Attendance = () => {
     };
 
     const getCurrentIcon = () => {
-        if (isProcessing) return <CheckCircle size={50} className="text-green-500 animate-bounce" />;
-        if (!challengeQueue || challengeQueue.length === 0) return <Loader size={50} className="animate-spin text-blue-500" />;
+        if (!challengeQueue || challengeQueue.length === 0) return <Camera size={48} className="text-gray-400" />;
         const currentChallenge = challengeQueue[currentStep];
-        return currentChallenge ? currentChallenge.icon : <Loader size={50} />;
+        
+        if (isProcessing) return <CheckCircle size={48} className="text-green-500 animate-bounce" />;
+        if (!currentChallenge) return <CheckCircle size={48} className="text-green-500" />; // Fallback aman
+        
+        return currentChallenge.icon;
     };
 
     return (
@@ -307,7 +299,6 @@ const Attendance = () => {
                         <ScanFace size={28} className="text-blue-600" />
                         Absensi Biometrik
                     </h2>
-                    
                     <div className={styles.statusContainer}>
                         <span className={`${styles.statusBadge} ${modelsLoaded ? styles.ready : styles.error}`}>
                             {modelsLoaded ? 'AI Siap' : 'Memuat AI...'}
@@ -365,9 +356,7 @@ const Attendance = () => {
                             ))}
                         </div>
 
-                        {locationError && (
-                            <div className={styles.errorBox}><AlertTriangle size={18} /> {locationError}</div>
-                        )}
+                        {locationError && <div className={styles.errorBox}><AlertTriangle size={18} /> {locationError}</div>}
 
                         <button onClick={handleCancel} className={styles.btnCancel} disabled={isProcessing}>
                             Batalkan Absensi
@@ -384,12 +373,10 @@ const Attendance = () => {
                         }}>
                             <ScanFace size={60} className="text-blue-600" />
                         </div>
-                        
                         <h3 style={{ color: '#1e293b', marginBottom: '10px', fontSize: '1.4rem' }}>Siap Melakukan Absensi?</h3>
                         <p style={{ color: '#64748b', marginBottom: '30px', maxWidth: '280px', lineHeight: '1.5' }}>
-                            Wajah akan difoto otomatis setelah tantangan selesai untuk validasi Timdis.
+                            Wajah akan difoto otomatis setelah tantangan selesai.
                         </p>
-
                         <button 
                             onClick={handleManualStart}
                             style={{

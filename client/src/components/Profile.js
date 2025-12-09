@@ -1,12 +1,9 @@
-// src/components/Profile.js
-
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { User, Lock, Camera, ShieldCheck, Save } from 'lucide-react';
 import styles from './Profile.module.css';
 
 const Profile = () => {
-    // ... (STATE DAN LOGIC JS TIDAK BERUBAH) ...
     const [formData, setFormData] = useState({ nama: '', npm: '', kelas: '', email: '', programName: '', majorName: '' });
     const [passwords, setPasswords] = useState({ currentPassword: '', newPassword: '', confirmPassword: '' });
     const [currentPicture, setCurrentPicture] = useState('');
@@ -160,8 +157,8 @@ const Profile = () => {
                 </div>
                 
                 <form onSubmit={handlePassSubmit}>
-                    <div className={styles.formGrid} style={{ gridTemplateColumns: '1fr 1fr 1fr' }}> 
-                        {/* Membuat input password sejajar 3 kolom jika layar lebar */}
+                    {/* MODIFIKASI: Menambahkan class 'verticalGrid' agar input menurun ke bawah */}
+                    <div className={`${styles.formGrid} ${styles.verticalGrid}`}> 
                         <div className={styles.formGroup}>
                             <label className={styles.label}>Password Saat Ini</label>
                             <input type="password" name="currentPassword" value={passwords.currentPassword} onChange={handlePassChange} className={styles.input} placeholder="Password lama" required />

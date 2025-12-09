@@ -112,18 +112,28 @@ const Attendance = () => {
     // 3. Load Models (Ganti SSD ke TinyFaceDetector)
     useEffect(() => {
         const loadModels = async () => {
-            const MODEL_URL = '/models'; 
+            const MODEL_URL = 'https://cdn.jsdelivr.net/npm/@vladmandic/face-api/model';
+            console.log("Mencoba download model dari:", MODEL_URL);
             try {
-                await Promise.all([
-                    // GANTI SSD DENGAN TINY
-                    faceapi.nets.tinyFaceDetector.loadFromUri(MODEL_URL), 
-                    faceapi.nets.faceLandmark68Net.loadFromUri(MODEL_URL),
-                    faceapi.nets.faceRecognitionNet.loadFromUri(MODEL_URL),
-                    faceapi.nets.faceExpressionNet.loadFromUri(MODEL_URL)
-                ]);
+                // Load model satu per satu biar ketahuan mana yang macet
+                await faceapi.nets.tinyFaceDetector.loadFromUri(MODEL_URL);
+                await faceapi.nets.faceLandmark68Net.loadFromUri(MODEL_URL);
+                await faceapi.nets.faceRecognitionNet.loadFromUri(MODEL_URL);
+                await faceapi.nets.faceExpressionNet.loadFromUri(MODEL_URL);
+                
+                console.log("Model Berhasil Dimuat!");
                 setModelsLoaded(true);
             } catch (err) {
-                Swal.fire('System Error', 'Gagal memuat AI Models. Pastikan file model lengkap.', 'error');
+                console.error("Gagal Load Model:", err);
+                
+                // TAMPILKAN ERROR ASLI DI LAYAR HP
+                // Ini penting agar saya bisa diagnosa jika masih gagal
+                Swal.fire({
+                    title: 'Model Error',
+                    text: `Detail: ${err.message}`, // Tampilkan pesan asli sistem
+                    icon: 'error',
+                    footer: `URL: ${MODEL_URL}`
+                });
             }
         };
         loadModels();
@@ -220,9 +230,69 @@ const Attendance = () => {
         }, 700); // 700ms (Lebih ringan)
     };
 
+    // --- FUNGSI DETEKSI TUYUL (VERSI @CCERVANTESB NPM) ---
+    const checkFakeGPS = async () => {
+        return new Promise((resolve) => {
+            // Cek path plugin: window.cordova.plugins.mockLocation
+            const plugin = window.cordova?.plugins?.mockLocation;
+
+            if (plugin) {
+                console.log("Memeriksa Fake GPS...");
+                
+                // Plugin ini menggunakan Promise: checkMockLocation()
+                plugin.checkMockLocation()
+                    .then((result) => {
+                        console.log("Mock Result:", result);
+                        // Output biasanya: { isMockLocation: true, messages: "..." }
+                        
+                        if (result && result.isMockLocation === true) {
+                            console.warn("FAKE GPS TERDETEKSI!");
+                            resolve(true); // BAHAYA
+                        } else {
+                            console.log("GPS Aman.");
+                            resolve(false); // AMAN
+                        }
+                    })
+                    .catch((err) => {
+                        console.error("Gagal cek mock location:", err);
+                        // Jika error, anggap aman saja agar user tidak terblokir
+                        resolve(false);
+                    });
+            } else {
+                console.warn("Plugin Mock Location tidak ditemukan (Mungkin di Browser?)");
+                resolve(false); // Bypass jika testing di laptop
+            }
+        });
+    };
+
     // 6. Submit
     const handleAttendanceSubmit = async (descriptor) => {
         if (!processingRef.current) return; 
+
+        Swal.fire({
+            title: 'Memverifikasi GPS...',
+            allowOutsideClick: false,
+            didOpen: () => Swal.showLoading()
+        });
+
+        const isFake = await checkFakeGPS();
+        
+        if (isFake) {
+            // JIKA KETAHUAN PALSU:
+            stopCameraAndLoop();
+            setIsSessionActive(false);
+            processingRef.current = false;
+            
+            // Tampilkan Peringatan Keras
+            await Swal.fire({
+                icon: 'error',
+                title: 'KECURANGAN TERDETEKSI!',
+                text: 'Sistem mendeteksi Fake GPS. Matikan aplikasi tersebut dan coba lagi.',
+                footer: 'Tindakan ini telah dicatat sistem.',
+                confirmButtonColor: '#d33'
+            });
+            return; // STOP! Jangan lanjut upload.
+        }
 
         try {
             const photoBlob = await getSnapshot();

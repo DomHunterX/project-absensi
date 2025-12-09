@@ -9,8 +9,9 @@ const dashboardRoutes = require('./routes/dashboardRoutes'); // Import
 // PASTIKAN SEMUA MODEL DI-IMPORT DI SINI AGAR TERDAFTAR DI SEQUELIZE
 require('./models/User'); 
 require('./models/Attendance');
-require('./models/Major');        // <<< BARU
-require('./models/StudyProgram'); // <<< BARU
+require('./models/Major');
+require('./models/StudyProgram');
+require('./models/Notification');
 
 const app = express();
 
@@ -69,3 +70,4 @@ app.listen(PORT, '0.0.0.0', () => {
   console.log(`Server berjalan di port ${PORT} dan siap menerima koneksi dari luar`);
 });
 
+app.use('/api/notifications', require('./routes/notificationRoutes'));

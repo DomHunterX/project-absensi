@@ -4,7 +4,9 @@ const { Canvas, Image, ImageData, loadImage } = require('canvas');
 const path = require('path');
 const fs = require('fs'); // Penting untuk hapus file
 const Attendance = require('../models/Attendance');
-const StudyProgram = require('../models/StudyProgram'); 
+const StudyProgram = require('../models/StudyProgram');
+const Notification = require('../models/Notification'); // Import model
+const { sendNotificationEmail } = require('../utils/emailService'); // Import email service
 const Major = require('../models/Major');            
 const { Op } = require('sequelize'); 
 
@@ -143,6 +145,36 @@ exports.validateAttendance = async (req, res) => {
         // Jika 'Ditolak', foto tetap disimpan sebagai barang bukti (atau bisa dihapus juga kalau mau)
 
         await attendance.save();
+
+        // --- UPDATE: KIRIM NOTIFIKASI & EMAIL JIKA DISETUJUI ---
+        if (status === 'Hadir') {
+            // 1. Buat Notifikasi di Database (In-App)
+            await Notification.create({
+                userId: attendance.userId,
+                title: 'Absensi Disetujui',
+                message: `Absensi Anda pada tanggal ${new Date(attendance.date).toLocaleDateString()} telah divalidasi oleh Admin.`,
+                type: 'success'
+            });
+
+            // 2. Kirim Email Notifikasi
+            const user = await User.findByPk(attendance.userId);
+            if (user && user.email) {
+                // Format tanggal yang mudah dibaca
+                const formattedDate = new Date(attendance.date).toLocaleDateString('id-ID', {
+                    weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'
+                });
+
+                sendNotificationEmail(
+                    user.email,
+                    'Status Absensi: Disetujui ✅',
+                    `Halo ${user.nama},<br/><br/>
+                     Absensi Anda untuk tanggal <b>${formattedDate}</b> telah <b>DISETUJUI</b> oleh Timdis/Admin.<br/>
+                     Status Anda sekarang tercatat sebagai: <b>Hadir</b>.<br/><br/>
+                     Terima kasih.`
+                );
+            }
+        }
+        // --- END UPDATE ---
 
         res.json({ msg: `Absensi berhasil divalidasi menjadi: ${status}` });
 

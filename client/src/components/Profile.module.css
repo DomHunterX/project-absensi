@@ -114,6 +114,11 @@
     width: 100%;
 }
 
+/* MODIFIKASI: Class khusus untuk membuat grid menjadi 1 kolom (vertikal) */
+.verticalGrid {
+    grid-template-columns: 1fr !important;
+}
+
 .formGroup { display: flex; flex-direction: column; gap: 8px; }
 .formGroup.fullWidth { grid-column: span 2; }
 

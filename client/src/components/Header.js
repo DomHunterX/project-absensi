@@ -2,9 +2,10 @@
 
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { useNavigate, Link } from 'react-router-dom'; // Import Link & useNavigate
+import { useNavigate, Link } from 'react-router-dom'; 
 import styles from './Header.module.css';
-import { User, Menu, ChevronDown, LogOut } from 'lucide-react'; // Tambah Icon
+import { User, Menu, ChevronDown, LogOut } from 'lucide-react'; 
+import NotificationBell from './NotificationBell'; // Import Komponen Notifikasi
 
 const Header = ({ toggleSidebar, isMobile }) => {
     const [currentTime, setCurrentTime] = useState('');
@@ -65,49 +66,56 @@ const Header = ({ toggleSidebar, isMobile }) => {
                 </div>
             </div>
 
-            {/* Bagian Kanan: User Info dengan Dropdown */}
-            <div 
-                className={styles.userInfo} 
-                onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-                title="Klik untuk menu"
-            >
-                <span className={styles.welcomeText}>
-                    {userName ? `Halo, ${userName.split(' ')[0]}!` : 'Loading...'}
-                </span>
+            {/* Bagian Kanan: Notifikasi & User Info */}
+            <div style={{ display: 'flex', alignItems: 'center', gap: '20px' }}>
                 
-                <div className={styles.avatar}>
-                    <User size={20} />
-                </div>
+                {/* --- 1. NOTIFICATION BELL (Dipasang di sini) --- */}
+                <NotificationBell />
 
-                <ChevronDown size={16} color="#64748b" />
-
-                {/* --- MENU DROPDOWN --- */}
-                {isDropdownOpen && (
-                    <div className={styles.dropdownMenu}>
-                        
-                        {/* Link ke Profil */}
-                        <Link 
-                            to="/profile" 
-                            className={styles.menuItem}
-                            onClick={(e) => e.stopPropagation()} // Supaya tidak menutup dropdown saat diklik (opsional, tapi lebih baik redirect langsung)
-                        >
-                            <User size={18} />
-                            <span>Profil Saya</span>
-                        </Link>
-
-                        {/* Tombol Logout */}
-                        <button 
-                            onClick={(e) => {
-                                e.stopPropagation(); // Mencegah event bubbling ke parent div
-                                handleLogout();
-                            }} 
-                            className={`${styles.menuItem} ${styles.logoutBtn}`}
-                        >
-                            <LogOut size={18} />
-                            <span>Keluar</span>
-                        </button>
+                {/* --- 2. USER INFO & DROPDOWN --- */}
+                <div 
+                    className={styles.userInfo} 
+                    onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+                    title="Klik untuk menu"
+                >
+                    <span className={styles.welcomeText}>
+                        {userName ? `Halo, ${userName.split(' ')[0]}!` : 'Loading...'}
+                    </span>
+                    
+                    <div className={styles.avatar}>
+                        <User size={20} />
                     </div>
-                )}
+
+                    <ChevronDown size={16} color="#64748b" />
+
+                    {/* --- MENU DROPDOWN --- */}
+                    {isDropdownOpen && (
+                        <div className={styles.dropdownMenu}>
+                            
+                            {/* Link ke Profil */}
+                            <Link 
+                                to="/profile" 
+                                className={styles.menuItem}
+                                onClick={(e) => e.stopPropagation()} // Supaya tidak menutup dropdown saat diklik
+                            >
+                                <User size={18} />
+                                <span>Profil Saya</span>
+                            </Link>
+
+                            {/* Tombol Logout */}
+                            <button 
+                                onClick={(e) => {
+                                    e.stopPropagation(); // Mencegah event bubbling ke parent div
+                                    handleLogout();
+                                }} 
+                                className={`${styles.menuItem} ${styles.logoutBtn}`}
+                            >
+                                <LogOut size={18} />
+                                <span>Keluar</span>
+                            </button>
+                        </div>
+                    )}
+                </div>
             </div>
         </header>
     );
